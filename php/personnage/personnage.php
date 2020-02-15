@@ -31,6 +31,35 @@ catch (Exception $e)
             private $_level = 1;
             private $_experience = 1;
             private $enemyName;
+
+            public function __construct($name){
+                $this->setName($name);
+            }
+
+            public function setName($name){
+                $this->_name = $name;
+            }
+
+            public function getName(){
+                return $this->_name;
+            }
+
+            public function getForce(){
+                return $this->_force;
+            }
+
+            public function getHp(){
+                return $this->_hp;
+            }
+
+            public function getLevel(){
+                return $this->_level;
+            }
+
+            public function getExperience(){
+                return $this->_experience;
+            }
+
         }
 
 
@@ -47,11 +76,40 @@ catch (Exception $e)
             ));
     
             $data = $reponse->fetch();
-            if ((isset($data['user_pseudo']))){
+            if (isset($data['user_pseudo'])){
                 echo "Le personnage existe";
             }else {
                 echo "Le personnage n'existe pas";
+                ?>
+                    <form action="" method="post">
+                        <label for="name">Rentrez le nom de votre personnage :</label>
+                        <input type="text" id="name" name="name" required>
+                        <input type="submit" value="Valider">
+                    </form>
+                <?php
+                    if(isset($_POST['name'])){
+                        
+                        $name = $_POST['name']; // renvoie le nom
+                        $$name = new PersonnageTest($_POST['name']); // initie la variable avec le nom
+
+                        $req = $bdd->prepare('INSERT INTO personnage (user_pseudo, name, forceTerre, hp, experience, level) VALUES (:user_pseudo, :name, :forceTerre, :hp, :experience, :level)');
+                        $req->execute(array(
+                            'user_pseudo' => $_SESSION['pseudo'],
+                            'name' => $$name->getName(),
+                            'forceTerre' => $$name->getForce(),
+                            'hp' => $$name->getHp(),
+                            'experience' => $$name->getExperience(),
+                            'level' => $$name->getLevel()
+                            
+                        ));
+
+                        var_dump($$name->getForce());
+                    }else {
+                        
+                    }
             }
+
+            // exemple
                 
     ?>
     </section>

@@ -9,7 +9,10 @@ catch (Exception $e)
     }
 
     session_start();
-?>
+
+    if ($_SESSION) {
+        ?>
+    
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -27,3 +30,9 @@ catch (Exception $e)
     
 </body>
 </html>
+
+<?php 
+    }else {
+        header("Location: php/login/seConnecter");
+    }
+?>
