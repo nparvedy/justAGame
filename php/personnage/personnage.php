@@ -62,6 +62,63 @@ catch (Exception $e)
 
         }
 
+        class PersonnageInstancier{ // class qui instancie notre personnage de la base de données
+            private $_name;
+            private $_force;
+            private $_hp;
+            private $_level;
+            private $_experience;
+            private $enemyName;
+
+            public function __construct($name, $force, $hp, $experience, $level){
+                $this->setName($name);
+                $this->setForce($force);
+                $this->setHp($hp);
+                $this->setExperience($experience);
+                $this->setLevel($level);
+            }
+
+            public function setName($name){
+                $this->_name = $name;
+            }
+
+            public function setForce($force){
+                $this->_force = $force;
+            }
+
+            public function setHp($hp){
+                $this->_hp = $hp;
+            }
+
+            public function setExperience($experience){
+                $this->_experience = $experience;
+            }
+
+            public function setLevel($level){
+                $this->_level = $level;
+            }
+
+            public function getName(){
+                return $this->_name;
+            }
+
+            public function getForce(){
+                return $this->_force;
+            }
+
+            public function getHp(){
+                return $this->_hp;
+            }
+
+            public function getLevel(){
+                return $this->_level;
+            }
+
+            public function getExperience(){
+                return $this->_experience;
+            }
+
+        }
 
     ?>
 
@@ -69,7 +126,7 @@ catch (Exception $e)
         <h1>Mon personnage</h1>
 
         <?php 
-        //if (isset($_POST['identifiant']) && isset($_POST['password']) ){
+
             $reponse = $bdd->prepare('SELECT * FROM personnage WHERE user_pseudo = :pseudo');
             $reponse->execute(array(
                 'pseudo' => $_SESSION['pseudo']
@@ -77,7 +134,31 @@ catch (Exception $e)
     
             $data = $reponse->fetch();
             if (isset($data['user_pseudo'])){
-                echo "Le personnage existe";
+                $name = $data['name']; // renvoie le nom
+                $$name = new PersonnageInstancier($data['name'], $data['forceTerre'], $data['hp'], $data['experience'], $data['level']); // initie la variable avec le nom 
+
+                // instancier une nouvelle classe avec les même propriétés que celle de la base de données
+                ?>
+                    <h2>Votre personnage s'appelle :  <?php echo $name ?></h2>
+
+                    <ul>
+                        <li>
+                            <p><?php echo $$name->getName(); ?></p>
+                        </li>
+                        <li>
+                            <p><?php echo $$name->getForce(); ?></p>
+                        </li>
+                        <li>
+                            <p><?php echo $$name->getHp(); ?></p>
+                        </li>
+                        <li>
+                            <p><?php echo $$name->getExperience(); ?></p>
+                        </li>
+                        <li>
+                            <p><?php echo $$name->getLevel(); ?></p>
+                        </li>
+                    </ul>
+                <?php
             }else {
                 echo "Le personnage n'existe pas";
                 ?>
@@ -90,7 +171,7 @@ catch (Exception $e)
                     if(isset($_POST['name'])){
                         
                         $name = $_POST['name']; // renvoie le nom
-                        $$name = new PersonnageTest($_POST['name']); // initie la variable avec le nom
+                        $$name = new PersonnageTest($_POST['name']); // initie la variable avec le nom 
 
                         $req = $bdd->prepare('INSERT INTO personnage (user_pseudo, name, forceTerre, hp, experience, level) VALUES (:user_pseudo, :name, :forceTerre, :hp, :experience, :level)');
                         $req->execute(array(
@@ -103,7 +184,6 @@ catch (Exception $e)
                             
                         ));
 
-                        var_dump($$name->getForce());
                     }else {
                         
                     }
