@@ -19,9 +19,26 @@ catch (Exception $e)
     <title>Document</title>
 </head>
 <body>
-    <?php 
-        include("../../include/menu.php");
-    ?>
+<header>
+    <ul>
+        <li>
+            <a href="../../index.php">Accueil</a>
+        </li>
+        <li>
+            <a href="personnage.php">Personnage</a>
+        </li>
+        <li>
+            <a href="arene.php">Arène</a>
+        </li>
+        <li>
+            <a href="#">Setting</a>
+        </li>
+        <li>
+            <a href="../../php/login/deconnexion.php">Déconnexion</a>
+        </li>
+
+    </ul>
+</header>
 
     <?php 
         class PersonnageTest{
@@ -135,7 +152,7 @@ catch (Exception $e)
             $data = $reponse->fetch();
             if (isset($data['user_pseudo'])){
                 $name = $data['name']; // renvoie le nom
-                $$name = new PersonnageInstancier($data['name'], $data['forceTerre'], $data['hp'], $data['experience'], $data['level']); // initie la variable avec le nom 
+                $$name = new PersonnageInstancier($data['name'], $data['forceTerre'], $data['hp'], $data['experience'], $data['level']); // Hydratation de l'objet  
 
                 // instancier une nouvelle classe avec les même propriétés que celle de la base de données
                 ?>
@@ -143,19 +160,19 @@ catch (Exception $e)
 
                     <ul>
                         <li>
-                            <p><?php echo $$name->getName(); ?></p>
+                            <p>Nom :<?php echo $$name->getName(); ?></p>
                         </li>
                         <li>
-                            <p><?php echo $$name->getForce(); ?></p>
+                            <p>Force : <?php echo $$name->getForce(); ?></p>
                         </li>
                         <li>
-                            <p><?php echo $$name->getHp(); ?></p>
+                            <p>Point de vie : <?php echo $$name->getHp(); ?></p>
                         </li>
                         <li>
-                            <p><?php echo $$name->getExperience(); ?></p>
+                            <p>Expérience : <?php echo $$name->getExperience(); ?></p>
                         </li>
                         <li>
-                            <p><?php echo $$name->getLevel(); ?></p>
+                            <p>Niveau : <?php echo $$name->getLevel(); ?></p>
                         </li>
                     </ul>
                 <?php
@@ -168,6 +185,7 @@ catch (Exception $e)
                         <input type="submit" value="Valider">
                     </form>
                 <?php
+                if(!empty($_POST['name'])){
                     if(isset($_POST['name'])){
                         
                         $name = $_POST['name']; // renvoie le nom
@@ -184,9 +202,14 @@ catch (Exception $e)
                             
                         ));
 
+                        header("Location: personnage.php");
                     }else {
                         
                     }
+                }else {
+                    echo "Veuillez remplir le champ";
+                }
+                    
             }
 
             // exemple

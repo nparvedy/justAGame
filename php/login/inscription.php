@@ -59,6 +59,8 @@ session_start();
                         'mail' => $_POST['mail'],
                         'password' => md5($_POST['password'])
                     ));
+
+                    header("Location: seConnecter.php");
                     }else {
                         echo "Désolé les mots de passe ne sont pas identiques";
                     }

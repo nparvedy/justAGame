@@ -38,6 +38,7 @@ catch (Exception $e)
             
             <input type="submit" value="Se connecter">
         </form>
+        <a href="inscription.php">S'inscrire</a>
     </section>
 
 <?php
