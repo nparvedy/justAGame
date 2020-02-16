@@ -5,7 +5,8 @@
         private $_force = 1;
         private $_hp = 10;
         private $_experienceGain = 10;
-        private $_enemyName;
+        private $_historique = [];
+        private $_lose;
 
         // Set & Get
 
@@ -49,13 +50,31 @@
             return $this->_experienceGain;
         }
 
+        public function setHistorique($valueHistorique){
+            array_push($this->_historique, $valueHistorique);
+        }
+
+        public function setLose(){
+            $this->_lose = true;
+        }
+
         // compétence & attaque
 
         public function takeDamage($damage, $enemy){
             $this->_hp -= $damage;
-            echo "Le monstre à pris $damage dégat(s) de " . $enemy->getName(). " et lui reste $this->_hp <br>";
+            $valueHistorique = "Le monstre à pris $damage dégat(s) de " . $enemy->getName(). " et lui reste $this->_hp <br>";
+            $this->setHistorique($valueHistorique);
             if ($this->_hp == 0){
-                echo "Le monstre est mort, ". $enemy->getName() . " à gagné ! Il gagne alors $this->_experienceGain expérience.";
+                // retourner l'histoire du combat en créant un tableau pour l'afficher, pour chaque echo ça renvoie dans le tableau
+                $valueHistorique = "Le monstre est mort, ". $enemy->getName() . " à gagné ! Il gagne alors $this->_experienceGain expérience.";
+                $this->setHistorique($valueHistorique);
+                $enemy->setWinXp($this);
+                $this->setLose();
+                $_SESSION['test'] = $this->_historique;
+                $_SESSION['monsterLost'] = $this->_lose;
+                $_SESSION['gainXp'] = $enemy->getExperience();
+                
+                header("Location: arene.php");
             }else {
                 return $this->monsterAttack($enemy);
             }
@@ -67,8 +86,6 @@
                 echo "Le monstre à gagné<br />"; 
             }else {
                 return $enemy->takeDamage($this->_force, $this);
-                echo "$this->_name frappe $enemy->_name";
-                $this->setNameEnemy($enemy);
             }
         }
 

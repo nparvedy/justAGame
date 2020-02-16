@@ -57,6 +57,10 @@ class PersonnageInstancier{ // class qui instancie notre personnage de la base d
                 return $this->_experience;
             }
 
+            public function setWinXp($enemy){
+                $this->_experience += $enemy->getExperienceGain();
+            }
+
             // compétences
 
             public function hitSomeone($enemy){
@@ -65,15 +69,14 @@ class PersonnageInstancier{ // class qui instancie notre personnage de la base d
                     $this->getExperience();
                 }else {
                     return $enemy->takeDamage($this->_force, $this);
-                    echo "$this->_name frappe $enemy->_name <br>";
-                    $this->setNameEnemy($enemy);
                 }
                 
             }
 
             public function takeDamage($damage, $enemy){
                 $this->_hp -= $damage;
-                echo "Notre personnage à pris $damage dégat(s) de " . $enemy->getName(). " et lui reste $this->_hp <br>";
+                $valueHistorique = "Notre personnage à pris $damage dégat(s) de " . $enemy->getName(). " et lui reste $this->_hp <br>";
+                $enemy->setHistorique($valueHistorique);
                 return $this->hitSomeone($enemy);
             }
 
